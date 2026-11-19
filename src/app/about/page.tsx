@@ -14,7 +14,7 @@ const Page: React.FC = () => {
       >
         <Image
           src="/images/avatar.png"
-          alt="ブログ運営者のアバター"
+          alt="ブログ運営者のアイコン"
           width={350}
           height={350}
           preload
