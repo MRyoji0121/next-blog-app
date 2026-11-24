@@ -22,7 +22,6 @@ jobs:
       - run: npm ci
       - name: Build Next.js static site
         env:
-          # リポジトリ名が username.github.io 以外の場合は "/リポジトリ名" を指定
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
         run: npm run build
       - uses: actions/upload-pages-artifact@v3
