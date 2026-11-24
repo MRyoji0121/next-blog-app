@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Monster Strike Calendar
 
-## Getting Started
+モンスターストライク（モンスト）のイベントスケジュール画面をモチーフにした、**イベント・コラボ開催スケジュール管理＆EX周回カウンター** Webアプリケーションです。
 
-First, run the development server:
+サーバーや外部データベースを使わず、ブラウザの `localStorage` にデータを保存する静的サイト（Next.js Static Export）として動作するため、GitHub Pages でそのまま公開・利用できます。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 主な機能
+
+### 1. モンスト風イベントスケジュール管理
+* **長期開催枠＆時間別タイムライン**: コラボやキャンペーンなどの長期イベントは上部のバナー枠に、時間指定の降臨やクエストは時間割形式のタイムラインに分けて見やすく表示します。
+* **リアルタイムステータス＆カウントダウン**: 現在時刻と自動で照合し、「現在開催中（残り時間カウントダウン）」「まもなく開始」「終了」をリアルタイムに切り替えます。
+* **注目イベントヒーローバー**: 開催中または直近で次に始まるイベントを画面最上部にピックアップ表示します。
+* **優先度・カテゴリ管理**: 4段階の優先度（最優先・高・中・低）による色分け・絞り込みや、カテゴリ別（コラボ・降臨・キャンペーン・その他）のフィルタリングに対応しています。
+
+### 2. 週表示・月表示カレンダー切り替え
+* **週表示モード**: 1週間分の日付タブを並べて表示し、前週・次週への移動や「今日に戻る」操作がワンタップで行えます。
+* **月表示モード**: 月間カレンダー上で長期コラボの開催期間ラインや各日の予定件数・優先度を一覧でき、日付を選ぶと該当日のタイムラインへ即座に切り替わります。
+
+### 3. リマインダー通知＆データバックアップ
+* **リマインド通知**: イベント開始前（5分前・15分前・30分前・1時間前）になると画面内アラートとブラウザ通知（Notification API）でお知らせします。
+* **JSONエクスポート / インポート**: 登録したスケジュールをJSONファイルとして保存・復元でき、端末間のデータ移行やバックアップが可能です。
+
+### 4. EX周回カウンター
+* ヘッダーの **「EXカウンター」** ボタンからいつでも起動できる周回管理ツールです。
+* ターゲット（キャラ）ごとに **周回数・EX遭遇数・敗北数・現在ラック** を記録できます。
+* **遭遇率（%）**・**勝率（%）**・**運極（ラック99）までの残り体数と達成度バー** を自動計算します。
+* ラックの一括加算ショートカット（`+2` / `+3` / `+5`）や、周回パーティ・立ち回りメモも保存可能です。
+
+---
+
+## 技術スタック
+
+* **フレームワーク**: Next.js 16 (App Router / `output: "export"`)
+* **UIライブラリ**: React 19
+* **言語**: TypeScript
+* **スタイリング**: Tailwind CSS v4
+* **アイコン**: FontAwesome
+* **ホスティング / CI**: GitHub Pages / GitHub Actions
+
+---
+
+## ディレクトリ構成
+
+```text
+├── .github/
+│   └── workflows/
+│       └── deploy.yml          # GitHub Pages 自動デプロイ設定
+├── app/
+│   ├── _components/
+│   │   ├── EventModal.tsx      # イベント追加・編集モーダル
+│   │   ├── ExCounterModal.tsx  # EX周回カウンターモーダル
+│   │   └── Header.tsx          # 共通ヘッダー（EXカウンター起動ボタン付き）
+│   ├── _types/
+│   │   └── schedule.ts         # イベント・EXカウンターの型定義
+│   ├── globals.css             # Tailwind CSS 読み込み
+│   ├── layout.tsx              # 全体レイアウト
+│   └── page.tsx                # メインスケジュール画面
+└── next.config.ts              # 静的エクスポート・basePath設定
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ローカル環境での起動方法
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. リポジトリをクローンします。
+   ```bash
+   git clone https://github.com/<ユーザー名>/<リポジトリ名>.git
+   cd <リポジトリ名>
+   ```
 
-## Learn More
+2. 依存パッケージをインストールします。
+   ```bash
+   npm install
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+3. 開発サーバーを起動します。
+   ```bash
+   npm run dev
+   ```
+   ブラウザで `http://localhost:3000` にアクセスするとアプリが表示されます。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## GitHub Pages での公開方法
 
-## Deploy on Vercel
+本リポジトリには `.github/workflows/deploy.yml` が含まれており、`main` ブランチへのプッシュ時に自動でビルド＆デプロイが実行されます。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. GitHub のリポジトリページで **Settings > Pages** を開きます。
+2. **Build and deployment** の **Source** で **「GitHub Actions」** を選択します。
+3. `main` ブランチへコードをプッシュすると Actions が実行され、`https://<ユーザー名>.github.io/<リポジトリ名>/` で公開されます。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> **Note**: リポジトリ名が `<ユーザー名>.github.io` の場合はサブパスが不要なため、`.github/workflows/deploy.yml` の `NEXT_PUBLIC_BASE_PATH` を `""` に設定してください。
+
+---
+
+## データの保存仕様について
+
+* スケジュールデータおよび EXカウンターの記録は、お使いのブラウザの `localStorage` に自動保存されます。
+* ブラウザのサイトデータ（キャッシュ等）を削除すると記録がリセットされるため、定期的な **「保存（JSONエクスポート）」** のご利用をおすすめします。
+
+2026/11/16 Created by Ryoji Maeda
