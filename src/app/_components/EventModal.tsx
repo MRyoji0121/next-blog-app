@@ -10,7 +10,7 @@ type Props = {
   onClose: () => void;
   onSave: (event: ScheduleEvent) => void;
   initialEvent?: ScheduleEvent | null;
-  defaultDate: string; // "YYYY-MM-DD"
+  defaultDate: string;
 };
 
 export const EventModal: React.FC<Props> = ({
@@ -76,24 +76,25 @@ export const EventModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="w-full max-w-md rounded-xl border border-slate-700 bg-slate-900 p-5 text-white shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 sm:items-center sm:p-4">
+      <div className="max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-2xl border border-slate-700 bg-slate-900 p-4 text-white shadow-2xl sm:rounded-xl sm:p-5">
         <div className="mb-4 flex items-center justify-between border-b border-slate-700 pb-3">
-          <h2 className="text-lg font-bold">
+          <h2 className="text-base font-bold sm:text-lg">
             {initialEvent ? "イベントを編集" : "新規イベント・リマインダー追加"}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="rounded p-1 text-slate-400 hover:bg-slate-800 hover:text-white"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white"
+            aria-label="閉じる"
           >
             <FontAwesomeIcon icon={faXmark} className="h-5 w-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-sm">
+        <form onSubmit={handleSubmit} className="space-y-3.5 text-sm">
           <div>
-            <label className="mb-1 block font-bold text-slate-300">
+            <label className="mb-1 block text-xs font-bold text-slate-300">
               イベント名 <span className="text-red-400">*</span>
             </label>
             <input
@@ -102,13 +103,13 @@ export const EventModal: React.FC<Props> = ({
               placeholder="例: 〇〇コラボ 超究極 / 禁忌の獄"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-white focus:border-amber-500 focus:outline-none"
+              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-base text-white focus:border-amber-500 focus:outline-none sm:py-2 sm:text-sm"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
             <div>
-              <label className="mb-1 block font-bold text-slate-300">カテゴリ</label>
+              <label className="mb-1 block text-xs font-bold text-slate-300">カテゴリ</label>
               <select
                 value={category}
                 onChange={(e) => {
@@ -118,7 +119,7 @@ export const EventModal: React.FC<Props> = ({
                     setIsLongTerm(true);
                   }
                 }}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-white focus:border-amber-500 focus:outline-none"
+                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-2.5 text-base text-white focus:border-amber-500 focus:outline-none sm:py-2 sm:text-sm"
               >
                 <option value="collab">コラボ</option>
                 <option value="advent">降臨・クエスト</option>
@@ -128,14 +129,14 @@ export const EventModal: React.FC<Props> = ({
             </div>
 
             <div>
-              <label className="mb-1 block font-bold text-slate-300">
+              <label className="mb-1 block text-xs font-bold text-slate-300">
                 <FontAwesomeIcon icon={faStar} className="mr-1 text-amber-400" />
                 優先度
               </label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as Priority)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-white focus:border-amber-500 focus:outline-none"
+                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-2.5 text-base text-white focus:border-amber-500 focus:outline-none sm:py-2 sm:text-sm"
               >
                 <option value="urgent">最優先（絶対参加）</option>
                 <option value="high">高（優先）</option>
@@ -145,51 +146,54 @@ export const EventModal: React.FC<Props> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800/60 p-2.5">
+          <label
+            htmlFor="isLongTerm"
+            className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-slate-700 bg-slate-800/60 p-3"
+          >
             <input
               id="isLongTerm"
               type="checkbox"
               checked={isLongTerm}
               onChange={(e) => setIsLongTerm(e.target.checked)}
-              className="h-4 w-4 accent-amber-500"
+              className="h-4 w-4 shrink-0 accent-amber-500"
             />
-            <label htmlFor="isLongTerm" className="cursor-pointer text-xs text-slate-200">
+            <span className="text-xs leading-relaxed text-slate-200">
               <strong>長期開催枠（上部バナー）</strong>として表示する（コラボ期間など）
-            </label>
-          </div>
+            </span>
+          </label>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div>
-              <label className="mb-1 block font-bold text-slate-300">開始日時</label>
+            <div className="min-w-0">
+              <label className="mb-1 block text-xs font-bold text-slate-300">開始日時</label>
               <input
                 type="datetime-local"
                 required
                 value={startAt}
                 onChange={(e) => setStartAt(e.target.value)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none"
+                className="w-full min-w-0 rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-2 text-base text-white focus:border-amber-500 focus:outline-none sm:text-xs"
               />
             </div>
-            <div>
-              <label className="mb-1 block font-bold text-slate-300">終了日時</label>
+            <div className="min-w-0">
+              <label className="mb-1 block text-xs font-bold text-slate-300">終了日時</label>
               <input
                 type="datetime-local"
                 required
                 value={endAt}
                 onChange={(e) => setEndAt(e.target.value)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none"
+                className="w-full min-w-0 rounded-lg border border-slate-700 bg-slate-800 px-2.5 py-2 text-base text-white focus:border-amber-500 focus:outline-none sm:text-xs"
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1 block font-bold text-slate-300">
+            <label className="mb-1 block text-xs font-bold text-slate-300">
               <FontAwesomeIcon icon={faBell} className="mr-1 text-amber-400" />
               リマインド通知
             </label>
             <select
               value={remindMinutes}
               onChange={(e) => setRemindMinutes(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-white focus:border-amber-500 focus:outline-none"
+              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-base text-white focus:border-amber-500 focus:outline-none sm:py-2 sm:text-sm"
             >
               <option value={0}>通知なし</option>
               <option value={5}>開始 5分前</option>
@@ -200,13 +204,15 @@ export const EventModal: React.FC<Props> = ({
           </div>
 
           <div>
-            <label className="mb-1 block font-bold text-slate-300">メモ（適正キャラ・周回目標など）</label>
+            <label className="mb-1 block text-xs font-bold text-slate-300">
+              メモ（適正キャラ・周回目標など）
+            </label>
             <textarea
               rows={2}
               placeholder="例: 運極作成まであと35体 / 宝箱使用"
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-white focus:border-amber-500 focus:outline-none"
+              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-base text-white focus:border-amber-500 focus:outline-none sm:text-sm"
             />
           </div>
 
@@ -214,13 +220,13 @@ export const EventModal: React.FC<Props> = ({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg bg-slate-700 px-4 py-2 font-bold text-slate-200 hover:bg-slate-600"
+              className="rounded-lg bg-slate-700 px-4 py-2.5 font-bold text-slate-200 hover:bg-slate-600 sm:py-2"
             >
               キャンセル
             </button>
             <button
               type="submit"
-              className="rounded-lg bg-amber-500 px-5 py-2 font-bold text-slate-950 hover:bg-amber-400"
+              className="rounded-lg bg-amber-500 px-5 py-2.5 font-bold text-slate-950 hover:bg-amber-400 sm:py-2"
             >
               保存する
             </button>

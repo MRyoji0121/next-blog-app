@@ -5,11 +5,11 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
 
-import Header from "@/app/_components/Header";  
+import Header from "@/app/_components/Header";
 
 export const metadata: Metadata = {
-  title: "NextBlogApp",
-  description: "Built to learn Next.js and modern web development.",
+  title: "Monster Strike Calendar",
+  description: "イベント・コラボ開催スケジュール＆リマインダー",
 };
 
 type Props = {
@@ -20,10 +20,11 @@ const RootLayout: React.FC<Props> = (props) => {
   const { children } = props;
   return (
     <html lang="ja">
-      <body>
-          <Header />
-        <div className="mx-4 mt-2 max-w-2xl md:mx-auto">
-          {children}</div>
+      <body className="bg-slate-100 text-slate-900">
+        <Header />
+        <div className="mx-auto mt-3 max-w-6xl px-3 sm:px-5">
+          {children}
+        </div>
       </body>
     </html>
   );
