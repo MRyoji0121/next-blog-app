@@ -6,9 +6,19 @@ export interface ScheduleEvent {
   title: string;
   category: EventCategory;
   priority: Priority;
-  startAt: string; 
-  endAt: string;    
-    isLongTerm: boolean;
-    remindMinutes: number;
+  startAt: string;
+  endAt: string;
+  isLongTerm: boolean;
+  remindMinutes: number;
   memo?: string;
+}
+
+export interface ExCounterItem {
+  id: string;
+  name: string;       
+  runs: number;       
+  encounters: number; 
+  defeats: number;    
+  luck: number; 
+  memo?: string;      
 }
