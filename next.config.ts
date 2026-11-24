@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
+const repoName = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "export",
+  basePath: repoName,
+  images: {
+    unoptimized: true,
+  },
   cacheComponents: false,
   devIndicators: false,
   turbopack: {
